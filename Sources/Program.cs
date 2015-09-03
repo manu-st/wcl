@@ -1,6 +1,6 @@
 ﻿using System;
-using WCL.Sources.windows;
 using WCL.Support;
+using WCL.Windows;
 
 static class Program
 {

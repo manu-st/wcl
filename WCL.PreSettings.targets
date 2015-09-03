@@ -6,6 +6,7 @@
 
   <PropertyGroup>
 	<IntermediateOutputPath>CGens\$(Configuration)\obj\</IntermediateOutputPath>
+	<OutputPath>CGens\$(Configuration)\bin</OutputPath>
 	<OutDir>CGens\$(Configuration)\bin</OutDir>
 
     <TargetFrameworkRootPath>CoreFX</TargetFrameworkRootPath>

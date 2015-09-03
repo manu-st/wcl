@@ -1,5 +1,6 @@
 ﻿using System;
 using WCL;
+using WCL.Callbacks;
 using WCL.Enums;
 using WCL.Structs;
 
@@ -58,9 +59,18 @@ namespace WCL.Windows
 			Win32.ShowWindow (_item, ShowWindowCommands.Show);
 		}
 
+// feature -- Internal properties
+
+		public abstract string class_name ();
+		public abstract ClassStyles class_style ();
+		public abstract WndProc class_window_procedure ();
+		public abstract WindowStyles default_style ();
+		public abstract WindowStylesEx default_ex_style ();
+
 // feature -- Implementation: Access
 
 		private Window _parent;
 		private IntPtr _item;
+
 	}
 }
