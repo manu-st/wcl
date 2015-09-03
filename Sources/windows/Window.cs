@@ -1,9 +1,9 @@
 ﻿using System;
 using WCL;
-using WCL.enums;
+using WCL.Enums;
 using WCL.Structs;
 
-namespace WCL.windows
+namespace WCL.Windows
 {
 	public abstract class Window
 	{

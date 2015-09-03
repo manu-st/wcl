@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace WCL.enums
+namespace WCL.Enums
 {
 	public enum ShowWindowCommands
 	{

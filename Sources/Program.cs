@@ -1,15 +1,14 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using WCL.Sources.windows;
+using WCL.Support;
 
-namespace WCL
+static class Program
 {
-	static class Program
+	static void Main(string[] args)
 	{
-		static void Main(string[] args)
-		{
-		}
+		Application app = new Application ();
+		TitledWindow win = new TitledWindow ("A nice Title!");
+		win.show ();
+		app.launch ();
 	}
 }
