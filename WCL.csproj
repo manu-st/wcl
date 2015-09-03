@@ -33,12 +33,17 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="Sources\enums\PeekMessagesConstants.cs" />
     <Compile Include="Sources\enums\ShowWindowCommands.cs" />
+    <Compile Include="Sources\enums\WmConstants.cs" />
+    <Compile Include="Sources\structs\Msg.cs" />
     <Compile Include="Sources\structs\Rect.cs" />
     <Compile Include="Sources\structs\Point.cs" />
     <Compile Include="Sources\Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Sources\support\Application.cs" />
     <Compile Include="Sources\win32\Win32.cs" />
+    <Compile Include="Sources\windows\TitledWindow.cs" />
     <Compile Include="Sources\windows\Window.cs" />
   </ItemGroup>
   <Import Project="WCL.PostSettings.targets" />
