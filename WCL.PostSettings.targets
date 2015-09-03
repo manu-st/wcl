@@ -2,5 +2,5 @@
   <!--
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   -->
-  <Import Project="C:\work\sharp\CoreFX\configs\Microsoft.Portable.CSharp.targets" />
+  <Import Project="CoreFX\configs\Microsoft.Portable.CSharp.targets" />
 </Project>  

@@ -8,8 +8,8 @@
 	<IntermediateOutputPath>CGens\$(Configuration)\obj\</IntermediateOutputPath>
 	<OutDir>CGens\$(Configuration)\bin</OutDir>
 
-    <TargetFrameworkRootPath>c:\work\sharp\CoreFX</TargetFrameworkRootPath>
-    <FrameworkPathOverride>C:\work\sharp\CoreFX\CoreCLR\v5.0</FrameworkPathOverride>
+    <TargetFrameworkRootPath>CoreFX</TargetFrameworkRootPath>
+    <FrameworkPathOverride>CoreFX\CoreCLR\v5.0</FrameworkPathOverride>
   </PropertyGroup>
 
 </Project>
