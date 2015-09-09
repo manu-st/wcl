@@ -1,7 +1,14 @@
-﻿using System;
+﻿// Copyright (c) 2015 manu-silicon
+// This file is distributed under the MIT License. See LICENSE.md for details.
+
+using System;
 
 namespace WCL.Enums
 {
+		/// <summary>
+		/// List of constants to be used for the style of a WndClass instance.
+		/// See https://msdn.microsoft.com/en-us/library/windows/desktop/ff729176(v=vs.85).aspx for more details.
+		/// </summary>
 	[Flags]
 	public enum ClassStyles : uint
 	{
