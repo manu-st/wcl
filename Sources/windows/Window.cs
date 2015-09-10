@@ -11,9 +11,7 @@ namespace WCL.Windows
 {
 	public abstract class Window
 	{
-
-// feature -- Access
-
+#region Access
 		public Window parent
 			// Parent of current window if any.
 		{
@@ -54,17 +52,17 @@ namespace WCL.Windows
 			Win32.GetClientRect (_item, out l_result);
 			return l_result;
 		}
+#endregion
 
-// feature -- Element change
-
+#region Element change
 		public void show ()
 			// Show window.
 		{
 			Win32.ShowWindow (_item, ShowWindowCommands.Show);
 		}
+#endregion
 
-// feature -- Event loop
-
+#region Messaging
 		public IntPtr window_procedure (IntPtr hwnd, WmConstants msg, IntPtr wparam, IntPtr lparam)
 			// Routine called by Windows whenever a new message is received for the current window.
 		{
@@ -78,16 +76,20 @@ namespace WCL.Windows
 					return Win32.DefWindowProc (hwnd, msg, wparam, lparam);
 			}
 		}
+#endregion
 
-// feature -- Internal properties
-
+#region Window class properties
 		public abstract string class_name ();
 		public abstract ClassStyles class_style ();
 		public abstract WndProc class_window_procedure ();
+#endregion
+
+#region Window default creation properties
 		public abstract WindowStyles default_style ();
 		public abstract WindowStylesEx default_ex_style ();
+#endregion
 
-// feature -- Implementation: Access
+		// feature -- Implementation: Access
 
 		protected Window _parent;
 		protected IntPtr _item;

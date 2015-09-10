@@ -13,6 +13,7 @@ namespace WCL.Sources.structs
 		/// <typeparam name="T">Type of the underlying C struct that will be allocated and manipulated.</typeparam>
 	public unsafe abstract class Structure<T>: IDisposable where T : struct 
 	{
+#region Initialization
 		public Structure ()
 		{
 			IntPtr l_item = Marshal.AllocHGlobal (Marshal.SizeOf<T> ());
@@ -27,16 +28,22 @@ namespace WCL.Sources.structs
 			Contract.Ensures (_item != IntPtr.Zero, "item_set");
 			Contract.Ensures (!_shared, "not shared");
 		}
+#endregion
 
+#region Status Report
 		public bool is_shared
 		{
 			get { return _shared; }
 			set { _shared = value; }
 		}
+#endregion
 
+#region Implementation: Access
 		protected IntPtr _item;
 		protected bool _shared;
+		#endregion
 
+#region Disposal
 		protected virtual void Dispose (bool disposing)
 		{
 			if ((_item != null) && !_shared) {
@@ -53,5 +60,7 @@ namespace WCL.Sources.structs
 		{
 			Dispose (true);
 		}
+#endregion
+
 	}
 }

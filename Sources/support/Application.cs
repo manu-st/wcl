@@ -9,10 +9,13 @@ namespace WCL.Support
 {
 	class Application
 	{
+#region Initialization
 		public Application ()
 		{
 		}
+#endregion
 
+#region Basic Operations
 		public void launch ()
 		{
 			Msg msg = new Msg ();
@@ -32,5 +35,7 @@ namespace WCL.Support
 				}
 			}
 		}
+#endregion
+
 	}
 }

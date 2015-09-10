@@ -14,15 +14,15 @@ namespace WCL
 		/// </summary>
 	public static class Win32
 	{
-
+#region Miscellaneous
 		[DllImport("kernel32.dll")]
 		public static extern uint GetLastError();
 
 		[DllImport ("kernel32.dll", EntryPoint = "RtlFillMemory", SetLastError = false)]
 		public static extern void FillMemory (IntPtr destination, uint length, byte fill);
+#endregion
 
-		// feature -- Window
-
+#region Windows
 		[DllImport ("user32.dll", SetLastError = true, CharSet = CharSet.Unicode, ExactSpelling = true, EntryPoint = "CreateWindowExW")]
 		public static extern IntPtr CreateWindowEx(WindowStylesEx dwExStyle, string lpClassName, string lpWindowName, WindowStyles dwStyle,
 			int x, int y, int nWidth, int nHeight, IntPtr hWndParent, IntPtr hMenu, IntPtr hInstance, IntPtr lpParam);
@@ -43,13 +43,8 @@ namespace WCL
 		public static extern ushort RegisterClass(IntPtr lpWndClass);
 
 		[DllImport ("user32.dll", CharSet = CharSet.Unicode, ExactSpelling = true, EntryPoint = "UnregisterClassW")]
-		public static extern bool UnregisterClassW (IntPtr lpClassName, IntPtr hInstance);
-
-		[DllImport("user32.dll", CharSet = CharSet.Unicode)]
 		[return: MarshalAs(UnmanagedType.Bool)]
-		static extern bool UnregisterClass([MarshalAs (UnmanagedType.LPWStr)] string lpClassName, IntPtr hInstance);
-
-// feature -- Rect API
+		public static extern bool UnregisterClass (IntPtr lpClassName, IntPtr hInstance);
 
 		[DllImport("user32.dll")]
 		[return: MarshalAs(UnmanagedType.Bool)]
@@ -62,9 +57,9 @@ namespace WCL
 		[DllImport("user32.dll")]
 		[return: MarshalAs(UnmanagedType.Bool)]
 		public static extern bool GetClientRect (IntPtr hWnd, out Rect lpRect);
+#endregion
 
-// feature -- Messaging
-
+#region Messaging
 		[DllImport ("user32.dll", SetLastError = true, CharSet = CharSet.Unicode, ExactSpelling = true, EntryPoint = "DefWindowProcW")]
 		public static extern IntPtr DefWindowProc(IntPtr hWnd, WmConstants msg, IntPtr wParam, IntPtr lParam);
 
@@ -86,17 +81,17 @@ namespace WCL
 
 		[DllImport("user32.dll")]
 		public static extern IntPtr DispatchMessage([In] ref Msg lpmsg);
+#endregion
 
-// feature -- Process
-
+#region Process
 		[DllImport("kernel32.dll", CharSet=CharSet.Unicode)]
 		public static extern IntPtr GetModuleHandle([MarshalAs(UnmanagedType.LPWStr)] string lpModuleName);
+#endregion
 
-// feature -- Images
-
+#region GDI
 		[DllImport("user32.dll")]
 		public static extern IntPtr LoadCursor(IntPtr hInstance, int lpCursorName);
-
+#endregion
 
 	}
 }

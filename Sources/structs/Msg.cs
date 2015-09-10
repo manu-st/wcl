@@ -15,13 +15,16 @@ namespace WCL.Structs
 	[StructLayout (LayoutKind.Sequential)]
 	public struct Msg
 	{
+#region Access
 		public IntPtr hwnd;
 		public WmConstants message;
 		public IntPtr wParam;
 		public IntPtr lParam;
 		public UInt32 time;
 		public Point pt;
+#endregion
 
+#region Basic Operations
 		public bool peek_all ()
 			// Peek all messages in the queue.
 		{
@@ -45,5 +48,7 @@ namespace WCL.Structs
 		{
 			Win32.DispatchMessage (ref this);
 		}
+#endregion
+
 	}
 }

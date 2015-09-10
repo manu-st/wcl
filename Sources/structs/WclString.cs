@@ -13,6 +13,7 @@ namespace WCL.Structs
 		/// </summary>
 	public class WclString
 	{
+#region Initialization
 		public WclString (string s) : this (s.Length)
 		{
 			Contract.Requires (s != null, "s not null");
@@ -40,14 +41,20 @@ namespace WCL.Structs
 			Contract.Ensures (_item != IntPtr.Zero, "item_set");
 			Contract.Ensures (capacity == n, "capacity_set");
 		}
+		#endregion
 
+#region Access
 		public IntPtr item { get { return _item; } }
+
+		public const int unit_size = 2;
 
 		public string get_string ()
 		{
 			return Marshal.PtrToStringUni (_item);
 		}
+#endregion
 
+#region Measurements
 		public int capacity
 			// Capacity that `item' can hold expressed in number of characters (i.e. a multiple of `unit_size'.
 		{
@@ -75,7 +82,9 @@ namespace WCL.Structs
 				return capacity;
 			}
 		}
+#endregion
 
+#region Element change
 		public void set_string (string a_string)
 		{
 			Contract.Requires (a_string != null, "a_string not null");
@@ -92,10 +101,12 @@ namespace WCL.Structs
 
 			Contract.Ensures (get_string ().Equals (a_string), "string_set");
 		}
+#endregion
 
-		public const int unit_size = 2;
+#region Implementation: Accesss
 		protected int _capacity;
 		protected IntPtr _item;
+#endregion
 
 		[ContractInvariantMethod]
 		private void ClassInvariant ()

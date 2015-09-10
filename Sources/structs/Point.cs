@@ -13,13 +13,18 @@ namespace WCL.Structs
 	[StructLayout (LayoutKind.Sequential)]
 	public struct Point
 	{
-		public int x;
-		public int y;
-
+#region Initialization
 		public Point (int a_x, int a_y)
 		{
 			x = a_x;
 			y = a_y;
 		}
+#endregion
+
+#region Access
+		public int x;
+		public int y;
+#endregion
+
 	}
 }

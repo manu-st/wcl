@@ -11,6 +11,7 @@ namespace WCL.Windows
 {
 	class TitledWindow : Window
 	{
+#region Initialization
 		public TitledWindow (string a_title)
 		{
 			register_class ();
@@ -20,9 +21,9 @@ namespace WCL.Windows
 				throw new Exception("Cannot create a new window!");
 			}
 		}
+#endregion
 
-// feature -- Internal properties
-
+#region Internal Properties
 		private WndClass wnd_class;
 
 		private void register_class ()
@@ -38,7 +39,9 @@ namespace WCL.Windows
 
 			Contract.Ensures (l_class.is_registered (), "class is registered");
 		}
+#endregion
 
+#region Window class properties
 		public override string class_name ()
 		{
 			return "WCL_TITLED_WINDOW";
@@ -53,7 +56,9 @@ namespace WCL.Windows
 		{
 			return new WndProc(window_procedure);
 		}
+#endregion
 
+#region Window default creation properties
 		public override WindowStyles default_style ()
 		{
 			return WindowStyles.WS_TITLEDWINDOW | WindowStyles.WS_DLGFRAME | WindowStyles.WS_CLIPSIBLINGS | WindowStyles.WS_BORDER;
@@ -63,5 +68,6 @@ namespace WCL.Windows
 		{
 			return WindowStylesEx.WS_EX_CONTROLPARENT;
 		}
+#endregion
 	}
 }

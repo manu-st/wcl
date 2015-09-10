@@ -16,7 +16,7 @@ namespace WCL.Structs
 		/// </summary>
 	public class WndClass : Structure<_WndClass>
 	{
-
+#region Initialization
 		public WndClass (string a_class_name): base()
 			// Initialize current instance with `a_class_name' as `class_name'.
 		{
@@ -30,7 +30,9 @@ namespace WCL.Structs
 			Contract.Ensures (class_name.Equals (a_class_name), "class_name_set");
 			Contract.Ensures (_item != IntPtr.Zero, "item_set");
 		}
+#endregion
 
+#region Access
 		public unsafe _WndClass* item
 		{
 			get { return (_WndClass*) _item; }
@@ -91,16 +93,24 @@ namespace WCL.Structs
 			get { return (ClassStyles) item->style; }
 			set { item->style = (uint) value; }
 		}
+#endregion
 
+#region Basic operations
 		public void register ()
 		{
 				// This returns the atom of the new registered class. For now we do not store it.
 			Win32.RegisterClass (_item);
 		}
 
-		public void unregister ()
+		public unsafe void unregister ()
 		{
+			Contract.Requires (is_registered (), "registered");
+
+			Win32.UnregisterClass (item->lpszClassName, item->hInstance);
+
+			Contract.Ensures (!is_registered (), "not registered");
 		}
+#endregion
 
 		public unsafe bool is_registered ()
 		{
