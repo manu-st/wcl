@@ -1,55 +1,136 @@
-﻿using System;
+﻿// Copyright (c) 2015 manu-silicon
+// This file is distributed under the MIT License. See LICENSE.md for details.
+
+using System;
+using System.Diagnostics.Contracts;
 using System.Runtime.InteropServices;
 using WCL.Callbacks;
 using WCL.Enums;
+using WCL.Sources.structs;
 
 namespace WCL.Structs
 {
-	[StructLayout (LayoutKind.Sequential)]
-	public struct WndClass
+		/// <summary>
+		/// Representation of the Win32 WND_CLASS structure.
+		/// See https://msdn.microsoft.com/en-us/library/windows/desktop/ms633576(v=vs.85).aspx for more details.
+		/// </summary>
+	public class WndClass : Structure<_WndClass>
 	{
-		public ClassStyles style;
-		[MarshalAs (UnmanagedType.FunctionPtr)]
-		public WndProc lpfnWndProc;
-		public int cbClsExtra;
-		public int cbWndExtra;
-		public IntPtr hInstance;
-		public IntPtr hIcon;
-		public IntPtr hCursor;
-		public IntPtr hbrBackground;
-		[MarshalAs (UnmanagedType.LPTStr)]
-		public string lpszMenuName;
-		[MarshalAs (UnmanagedType.LPTStr)]
-		public string lpszClassName;
 
-		public WndClass (string v) : this ()
+		public WndClass (string a_class_name): base()
+			// Initialize current instance with `a_class_name' as `class_name'.
 		{
-			style = 0;
-			lpfnWndProc = null;
-			cbClsExtra = 0;
-			cbWndExtra = 0;
-			hInstance = Win32.GetModuleHandle (null);
-			hIcon = IntPtr.Zero;
-			hCursor = IntPtr.Zero;
-			hbrBackground = IntPtr.Zero;
-			lpszMenuName = null;
-			lpszClassName = v;
+			Contract.Requires (a_class_name != null, "a_class_name not null");
+
+			class_name = a_class_name;
+			unsafe {
+				item->hInstance = Win32.GetModuleHandle (null);
+			}
+
+			Contract.Ensures (class_name.Equals (a_class_name), "class_name_set");
+			Contract.Ensures (_item != IntPtr.Zero, "item_set");
+		}
+
+		public unsafe _WndClass* item
+		{
+			get { return (_WndClass*) _item; }
+		}
+
+		public unsafe string class_name
+		{
+			get {
+				if (item->lpszClassName != IntPtr.Zero) {
+					return Marshal.PtrToStringUni (item->lpszClassName);
+				} else {
+					return null;
+				}
+			}
+			set {
+				if (value != null) {
+					_class_name = new WclString (value);
+					item->lpszClassName = _class_name.item;
+				} else {
+					_class_name = null;
+					item->lpszClassName = IntPtr.Zero;
+				}
+			}
+		}
+
+		public unsafe string menu_name
+		{
+			get {
+				if (item->lpszMenuName != IntPtr.Zero) {
+					return Marshal.PtrToStringUni (item->lpszMenuName);
+				} else {
+					return null;
+				}
+			}
+			set {
+				_menu_name = new WclString (value);
+				item->lpszMenuName = _menu_name.item;
+			}
+		}
+
+		public unsafe WndProc window_procedure
+		{
+			get { return _window_procedure; }
+			set {
+				_window_procedure = value;
+				item->lpfnWndProc = Marshal.GetFunctionPointerForDelegate <WndProc> (value);
+			}
+		}
+
+		public unsafe IntPtr cursor
+		{
+			get { return item->hCursor; }
+			set { item->hCursor = value; }
+		}
+
+		public unsafe ClassStyles style
+		{
+			get { return (ClassStyles) item->style; }
+			set { item->style = (uint) value; }
 		}
 
 		public void register ()
 		{
-			Win32.RegisterClass (ref this);
+				// This returns the atom of the new registered class. For now we do not store it.
+			Win32.RegisterClass (_item);
 		}
 
 		public void unregister ()
 		{
 		}
 
-		public bool is_registered ()
+		public unsafe bool is_registered ()
 		{
-			WndClass l_class;
-			return Win32.GetClassInfo (IntPtr.Zero, lpszClassName, out l_class) ||
-				Win32.GetClassInfo (hInstance, lpszClassName, out l_class);
+			_WndClass l_class;
+			return Win32.GetClassInfo (IntPtr.Zero, item->lpszClassName, &l_class) ||
+				Win32.GetClassInfo (item->hInstance, item->lpszClassName, &l_class);
 		}
+
+		private WclString _class_name;
+		private WclString _menu_name;
+		private WndProc _window_procedure;
 	}
+
+		/// <summary>
+		/// Wrapper of the WND_CLASS Windows structure. We do our own marshalling for the 
+		/// `lpszClassName' and `lpszMenuName' entry.
+		/// </summary>
+	[StructLayout (LayoutKind.Sequential)]
+	public struct _WndClass
+	{
+		public uint style;
+		public IntPtr lpfnWndProc;
+		public int cbClsExtra;
+		public int cbWndExtra;
+		public IntPtr hInstance;
+		public IntPtr hIcon;
+		public IntPtr hCursor;
+		public IntPtr hbrBackground;
+		public IntPtr lpszMenuName;
+		public IntPtr lpszClassName;
+	}
+
 }
