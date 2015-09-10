@@ -1,9 +1,11 @@
-﻿using System;
-using WCL;
+﻿// Copyright (c) 2015 manu-silicon
+// This file is distributed under the MIT License. See LICENSE.md for details.
+
+using System;
+using System.Diagnostics.Contracts;
 using WCL.Callbacks;
 using WCL.Enums;
 using WCL.Structs;
-using WCL.Windows;
 
 namespace WCL.Windows
 {
@@ -12,8 +14,11 @@ namespace WCL.Windows
 		public TitledWindow (string a_title)
 		{
 			register_class ();
-			Win32.CreateWindowEx (default_ex_style (), class_name (), a_title, default_style (), 0, 0, 0, 0, IntPtr.Zero,
+			_item = Win32.CreateWindowEx (default_ex_style (), class_name (), a_title, default_style (), -1, -1, -1, -1, IntPtr.Zero,
 				IntPtr.Zero, Win32.GetModuleHandle (null), IntPtr.Zero);
+			if (_item == IntPtr.Zero) {
+				throw new Exception("Cannot create a new window!");
+			}
 		}
 
 // feature -- Internal properties
@@ -25,11 +30,13 @@ namespace WCL.Windows
 			WndClass l_class = new WndClass (class_name ());
 			if (!l_class.is_registered ()) {
 				l_class.style = class_style ();
-				l_class.lpfnWndProc = class_window_procedure ();
-				// Check if we want to set the icon, the background brush, the menu name too.
+				l_class.window_procedure = class_window_procedure ();
+				l_class.cursor = Win32.LoadCursor (IntPtr.Zero, (int) IdcStandardCursors.Idc_arrow);
 				l_class.register ();
 			}
 			wnd_class = l_class;
+
+			Contract.Ensures (l_class.is_registered (), "class is registered");
 		}
 
 		public override string class_name ()
@@ -44,7 +51,7 @@ namespace WCL.Windows
 
 		public override WndProc class_window_procedure ()
 		{
-			return null;
+			return new WndProc(window_procedure);
 		}
 
 		public override WindowStyles default_style ()

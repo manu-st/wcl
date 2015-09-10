@@ -1,4 +1,7 @@
-﻿using System;
+﻿// Copyright (c) 2015 manu-silicon
+// This file is distributed under the MIT License. See LICENSE.md for details.
+
+using System;
 using WCL;
 using WCL.Callbacks;
 using WCL.Enums;
@@ -55,8 +58,25 @@ namespace WCL.Windows
 // feature -- Element change
 
 		public void show ()
+			// Show window.
 		{
 			Win32.ShowWindow (_item, ShowWindowCommands.Show);
+		}
+
+// feature -- Event loop
+
+		public IntPtr window_procedure (IntPtr hwnd, WmConstants msg, IntPtr wparam, IntPtr lparam)
+			// Routine called by Windows whenever a new message is received for the current window.
+		{
+			switch (msg) {
+				case WmConstants.Wm_close:
+						// Temporary handling to close the application as soon as we close a window.
+					Win32.PostMessage (hwnd, WmConstants.Wm_quit, IntPtr.Zero, IntPtr.Zero);
+					return IntPtr.Zero;
+
+				default:
+					return Win32.DefWindowProc (hwnd, msg, wparam, lparam);
+			}
 		}
 
 // feature -- Internal properties
@@ -69,8 +89,8 @@ namespace WCL.Windows
 
 // feature -- Implementation: Access
 
-		private Window _parent;
-		private IntPtr _item;
+		protected Window _parent;
+		protected IntPtr _item;
 
 	}
 }
