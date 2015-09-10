@@ -1,10 +1,17 @@
-﻿using System;
+﻿// Copyright (c) 2015 manu-silicon
+// This file is distributed under the MIT License. See LICENSE.md for details.
+
+using System;
 using System.Runtime.InteropServices;
 using WCL.Structs;
 using WCL.Enums;
 
 namespace WCL.Structs
 {
+		/// <summary>
+		/// Encapsulation of the Win32 MSG structure.
+		/// See https://msdn.microsoft.com/en-us/library/windows/desktop/ms644958(v=vs.85).aspx for more details.
+		/// </summary>
 	[StructLayout (LayoutKind.Sequential)]
 	public struct Msg
 	{
@@ -28,11 +35,13 @@ namespace WCL.Structs
 		}
 
 		public void translate ()
+			// Translate virtual-key messages into character messages.
 		{
 			Win32.TranslateMessage (ref this);
 		}
 
 		public void dispatch ()
+			// Dispatch the message to a window procedure.
 		{
 			Win32.DispatchMessage (ref this);
 		}
