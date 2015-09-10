@@ -1,5 +1,7 @@
-﻿using System;
-using WCL;
+﻿// Copyright (c) 2015 manu-silicon
+// This file is distributed under the MIT License. See LICENSE.md for details.
+
+using System;
 using WCL.Structs;
 using WCL.Enums;
 
@@ -9,7 +11,6 @@ namespace WCL.Support
 	{
 		public Application ()
 		{
-			
 		}
 
 		public void launch ()
