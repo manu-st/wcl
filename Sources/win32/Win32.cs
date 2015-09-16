@@ -59,8 +59,25 @@ namespace WCL
 		public static extern bool GetClientRect (IntPtr hWnd, out Rect lpRect);
 #endregion
 
+#region Drawing
+		[DllImport("user32.dll")]
+		[return: MarshalAs(UnmanagedType.Bool)]
+		public static extern bool InvalidateRect(IntPtr hWnd, IntPtr lpRect, bool bErase);
+
+		[DllImport("gdi32.dll")]
+		[return: MarshalAs(UnmanagedType.Bool)]
+		public static extern bool Rectangle(IntPtr hdc, int nLeftRect, int nTopRect, int nRightRect, int nBottomRect);
+
+		[DllImport("user32.dll")]
+		public static extern IntPtr BeginPaint(IntPtr hwnd, out PaintStruct lpPaint);
+
+        [DllImport("user32.dll")]
+        static extern bool EndPaint(IntPtr hWnd, [In] ref PaintStruct lpPaint);
+
+#endregion
+
 #region Messaging
-		[DllImport ("user32.dll", SetLastError = true, CharSet = CharSet.Unicode, ExactSpelling = true, EntryPoint = "DefWindowProcW")]
+        [DllImport ("user32.dll", SetLastError = true, CharSet = CharSet.Unicode, ExactSpelling = true, EntryPoint = "DefWindowProcW")]
 		public static extern IntPtr DefWindowProc(IntPtr hWnd, WmConstants msg, IntPtr wParam, IntPtr lParam);
 
 		[DllImport("user32.dll", CharSet = CharSet.Unicode, ExactSpelling = true, EntryPoint = "PeekMessageW")]
