@@ -72,7 +72,7 @@ namespace WCL
 		public static extern IntPtr BeginPaint(IntPtr hwnd, out PaintStruct lpPaint);
 
         [DllImport("user32.dll")]
-        static extern bool EndPaint(IntPtr hWnd, [In] ref PaintStruct lpPaint);
+        public static extern bool EndPaint(IntPtr hWnd, [In] ref PaintStruct lpPaint);
 
 #endregion
 
