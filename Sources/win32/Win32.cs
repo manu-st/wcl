@@ -74,6 +74,8 @@ namespace WCL
         [DllImport("user32.dll")]
         public static extern bool EndPaint(IntPtr hWnd, [In] ref PaintStruct lpPaint);
 
+		[DllImport("gdi32.dll", CharSet = CharSet.Unicode, ExactSpelling = true, EntryPoint = "TextOutW")]
+		public static extern bool TextOut(IntPtr hdc, int nXStart, int nYStart, string lpString, int cbString);
 #endregion
 
 #region Messaging

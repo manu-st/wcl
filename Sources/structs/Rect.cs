@@ -53,7 +53,14 @@ namespace WCL.Structs
 
 		public Point location
 		{
-			get { return new Point (left, top); }
+			get {
+				Point l_point = new Point (left, top);
+
+				Contract.Ensures (Contract.Result<Point> ().x == left, "x set with left");
+				Contract.Ensures (Contract.Result<Point> ().y == top, "y set with top");
+
+				return l_point;
+			}
 			set { x = value.x; y = value.y; }
 		}
 
