@@ -86,6 +86,7 @@
     <Compile Include="Sources\enums\ShowWindowCommands.cs" />
     <Compile Include="Sources\enums\WmConstants.cs" />
     <Compile Include="Sources\structs\Msg.cs" />
+    <Compile Include="Sources\structs\PaintStruct.cs" />
     <Compile Include="Sources\structs\Rect.cs" />
     <Compile Include="Sources\structs\Point.cs" />
     <Compile Include="Sources\Program.cs" />
