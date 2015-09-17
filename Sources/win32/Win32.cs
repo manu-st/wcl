@@ -35,6 +35,10 @@ namespace WCL
 		[return: MarshalAs(UnmanagedType.Bool)]
 		public static extern bool ShowWindow (IntPtr hWnd, ShowWindowCommands nCmdShow);
 
+		[DllImport("user32.dll")]
+		[return: MarshalAs(UnmanagedType.Bool)]
+		public static extern bool UpdateWindow(IntPtr hWnd);
+
 		[DllImport("user32.dll", CharSet = CharSet.Unicode, ExactSpelling = true, EntryPoint = "GetClassInfoW")]
 		[return: MarshalAs(UnmanagedType.Bool)]
 		public unsafe static extern bool GetClassInfo(IntPtr hInstance, IntPtr lpClassName, _WndClass *lpWndClass);
