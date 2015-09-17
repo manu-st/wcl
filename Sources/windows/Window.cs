@@ -74,9 +74,14 @@ namespace WCL.Windows
 #region Events
 		public delegate void PointerButtonPressDelegate (Window win, int x, int y, int button);
 		public delegate void ExposeDelegate (Window win, Dc a_dc, Rect a_rect);
+		public delegate void KeyDelegate (Window win, int a_vk, int a_key_flags);
+		public delegate void CharDelegate (Window win, char a_char, int a_key_flags);
 
 		public event PointerButtonPressDelegate pointer_button_press_actions;
 		public event ExposeDelegate expose_actions;
+		public event KeyDelegate key_down_actions;
+		public event KeyDelegate key_up_actions;
+		public event CharDelegate char_actions;
 #endregion
 
 #region Messaging
@@ -96,6 +101,18 @@ namespace WCL.Windows
 
 				case WmConstants.Wm_lbuttondown:
 					pointer_button_press_actions?.Invoke (this, (short) lparam.ToInt64 (), (short) (lparam.ToInt64 () >> 16), 1);
+					return IntPtr.Zero;
+
+				case WmConstants.Wm_keydown:
+					key_down_actions?.Invoke (this, (int) wparam.ToInt64(), (int) lparam.ToInt64());
+					return IntPtr.Zero;
+
+				case WmConstants.Wm_keyup:
+					key_up_actions?.Invoke (this, (int) wparam.ToInt64(), (int) lparam.ToInt64());
+					return IntPtr.Zero;
+
+				case WmConstants.Wm_char:
+					char_actions?.Invoke (this, (char) wparam.ToInt64(), (int) lparam.ToInt64());
 					return IntPtr.Zero;
 
 				case WmConstants.Wm_close:
