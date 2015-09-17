@@ -84,6 +84,7 @@
     <Compile Include="Sources\enums\IdcStandardCursors.cs" />
     <Compile Include="Sources\enums\PeekMessagesConstants.cs" />
     <Compile Include="Sources\enums\ShowWindowCommands.cs" />
+    <Compile Include="Sources\enums\VirtualCode.cs" />
     <Compile Include="Sources\enums\WmConstants.cs" />
     <Compile Include="Sources\gdi\Dc.cs" />
     <Compile Include="Sources\gdi\PaintDc.cs" />
