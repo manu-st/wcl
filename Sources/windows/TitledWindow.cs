@@ -61,12 +61,12 @@ namespace WCL.Windows
 #region Window default creation properties
 		public override WindowStyles default_style ()
 		{
-			return WindowStyles.WS_TITLEDWINDOW | WindowStyles.WS_DLGFRAME | WindowStyles.WS_CLIPSIBLINGS | WindowStyles.WS_BORDER;
+			return WindowStyles.Ws_titledwindow | WindowStyles.Ws_dlgframe | WindowStyles.Ws_clipsiblings | WindowStyles.Ws_border;
 		}
 
 		public override WindowStylesEx default_ex_style ()
 		{
-			return WindowStylesEx.WS_EX_CONTROLPARENT;
+			return WindowStylesEx.Ws_ex_controlparent;
 		}
 #endregion
 	}
