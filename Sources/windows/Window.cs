@@ -26,14 +26,14 @@ namespace WCL.Windows
 			get { return _item;}
 		}
 
-		public int x()
+		public int x ()
 			// x coordinate of current window relative to its parent if any. Otherwise `absolute_x'.
 		{
 			Window l_parent = _parent;
 
 			if (l_parent != null)
 			{
-				Point point = window_rect ().location;
+				Point point = client_rect ().location;
 				Win32.ScreenToClient (l_parent.item, ref point);
 				return point.x;
 			} else {
@@ -41,13 +41,45 @@ namespace WCL.Windows
 			}
 		}
 
+		public int y ()
+			// y coordinate of current window relative to its parent if any. Otherwise `absolute_y'.
+		{
+			Window l_parent = _parent;
+
+			if (l_parent != null)
+			{
+				Point point = client_rect ().location;
+				Win32.ScreenToClient (l_parent.item, ref point);
+				return point.y;
+			} else {
+				return absolute_y ();
+			}
+		}
+
+		public int width ()
+			// Width of current window.
+		{
+			return client_rect ().width;
+		}
+		public int height ()
+			// Height of current window.
+		{
+			return client_rect().height;
+		}
+
 		public int absolute_x ()
 			// Absolute x coordinate of current window.
 		{
-			return window_rect ().x;
+			return client_rect ().x;
 		}
 
-		public Rect window_rect ()
+		public int absolute_y ()
+			// Absolute y coordinate of current window.
+		{
+			return client_rect ().y;
+		}
+
+		public Rect client_rect ()
 			// Dimension of current window as a Rect where `left' and `top' are zero.
 		{
 			Rect l_result;
@@ -68,6 +100,19 @@ namespace WCL.Windows
 			// Show window.
 		{
 			Win32.ShowWindow (_item, ShowWindowCommands.Show);
+			Win32.UpdateWindow (_item);
+		}
+
+		public void set_width(int v)
+			// Set `width' with `v'.
+		{
+			Win32.SetWindowPos (_item, IntPtr.Zero, -1, -1, v, height (), SetWindowPosFlags.Swp_nomove);
+		}
+
+		public void set_height (int v)
+			// Set `height' with `v'.
+		{
+			Win32.SetWindowPos (_item, IntPtr.Zero, -1, -1, width (), v, SetWindowPosFlags.Swp_nomove);
 		}
 #endregion
 
