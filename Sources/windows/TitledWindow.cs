@@ -33,7 +33,10 @@ namespace WCL.Windows
 			if (!l_class.is_registered ()) {
 				l_class.style = class_style ();
 				l_class.window_procedure = class_window_procedure ();
+						// For the time being, users cannot change the icon, cursor and brush for the class.
 				l_class.cursor = Win32.LoadCursor (IntPtr.Zero, (int) IdcStandardCursors.Idc_arrow);
+				l_class.icon = Win32.LoadIcon (IntPtr.Zero, new IntPtr ((int) SystemIcons.Idi_application));
+				l_class.background_brush = Win32.GetStockObject (StockObjects.Gray_brush);
 				l_class.register ();
 			}
 			wnd_class = l_class;

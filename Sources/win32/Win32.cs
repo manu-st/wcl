@@ -126,6 +126,13 @@ namespace WCL
 #region GDI
 		[DllImport("user32.dll")]
 		public static extern IntPtr LoadCursor(IntPtr hInstance, int lpCursorName);
+
+		[DllImport("user32.dll")]
+		public static extern IntPtr LoadIcon(IntPtr hInstance, IntPtr lpIconName);
+
+		[DllImport("gdi32.dll")]
+		public static extern IntPtr GetStockObject(StockObjects fnObject);
+
 #endregion
 
 	}

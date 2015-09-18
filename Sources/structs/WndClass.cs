@@ -88,6 +88,17 @@ namespace WCL.Structs
 			set { item->hCursor = value; }
 		}
 
+		public unsafe IntPtr icon
+		{
+			get { return item->hIcon; }
+			set { item->hIcon = value; }
+		}
+		public unsafe IntPtr background_brush
+		{
+			get { return item->hbrBackground; }
+			set { item->hbrBackground = value; }
+		}
+
 		public unsafe ClassStyles style
 		{
 			get { return (ClassStyles) item->style; }

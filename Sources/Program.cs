@@ -26,6 +26,8 @@ class Program
 		win.key_down_actions += on_key_down;
 		win.key_up_actions += on_key_up;
 		win.show ();
+		win.set_width (200);
+		win.set_height (200);
 		app.launch ();
 	}
 
