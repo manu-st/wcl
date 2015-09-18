@@ -7,7 +7,7 @@ using WCL.Enums;
 
 namespace WCL.Support
 {
-	class Application
+	public class Application
 	{
 #region Initialization
 		public Application ()

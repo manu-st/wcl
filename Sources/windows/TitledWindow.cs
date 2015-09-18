@@ -9,13 +9,14 @@ using WCL.Structs;
 
 namespace WCL.Windows
 {
-	class TitledWindow : Window
+	public class TitledWindow : Window
 	{
 #region Initialization
 		public TitledWindow (string a_title)
 		{
 			register_class ();
-			_item = Win32.CreateWindowEx (default_ex_style (), class_name (), a_title, default_style (), -1, -1, -1, -1, IntPtr.Zero,
+			_item = Win32.CreateWindowEx (default_ex_style (), class_name (), a_title, default_style (), Win32.Cw_usedefault,
+				Win32.Cw_usedefault, Win32.Cw_usedefault, Win32.Cw_usedefault, IntPtr.Zero,
 				IntPtr.Zero, Win32.GetModuleHandle (null), IntPtr.Zero);
 			if (_item == IntPtr.Zero) {
 				throw new Exception("Cannot create a new window!");
