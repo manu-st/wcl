@@ -14,6 +14,10 @@ namespace WCL
 		/// </summary>
 	public static class Win32
 	{
+#region
+		public static int Cw_usedefault = unchecked ((int) 0x80000000);
+#endregion
+
 #region Miscellaneous
 		[DllImport("kernel32.dll")]
 		public static extern uint GetLastError();
@@ -61,6 +65,14 @@ namespace WCL
 		[DllImport("user32.dll")]
 		[return: MarshalAs(UnmanagedType.Bool)]
 		public static extern bool GetClientRect (IntPtr hWnd, out Rect lpRect);
+
+		[DllImport("user32.dll")]
+		[return: MarshalAs(UnmanagedType.Bool)]
+		static extern bool GetWindowRect(IntPtr hwnd, out Rect lpRect);
+
+		[DllImport("user32.dll", SetLastError = true)]
+		public static extern bool SetWindowPos(IntPtr hWnd, IntPtr hWndInsertAfter, int x, int y, int cx, int cy, SetWindowPosFlags uFlags);
+
 #endregion
 
 #region Drawing
@@ -75,15 +87,15 @@ namespace WCL
 		[DllImport("user32.dll")]
 		public static extern IntPtr BeginPaint(IntPtr hwnd, out PaintStruct lpPaint);
 
-        [DllImport("user32.dll")]
-        public static extern bool EndPaint(IntPtr hWnd, [In] ref PaintStruct lpPaint);
+		[DllImport("user32.dll")]
+		public static extern bool EndPaint(IntPtr hWnd, [In] ref PaintStruct lpPaint);
 
 		[DllImport("gdi32.dll", CharSet = CharSet.Unicode, ExactSpelling = true, EntryPoint = "TextOutW")]
 		public static extern bool TextOut(IntPtr hdc, int nXStart, int nYStart, string lpString, int cbString);
 #endregion
 
 #region Messaging
-        [DllImport ("user32.dll", SetLastError = true, CharSet = CharSet.Unicode, ExactSpelling = true, EntryPoint = "DefWindowProcW")]
+		[DllImport ("user32.dll", SetLastError = true, CharSet = CharSet.Unicode, ExactSpelling = true, EntryPoint = "DefWindowProcW")]
 		public static extern IntPtr DefWindowProc(IntPtr hWnd, WmConstants msg, IntPtr wParam, IntPtr lParam);
 
 		[DllImport("user32.dll", CharSet = CharSet.Unicode, ExactSpelling = true, EntryPoint = "PeekMessageW")]
