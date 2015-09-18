@@ -73,7 +73,7 @@
     <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
-    <OutputPath>bin\Release\</OutputPath>
+    <OutputPath>CGens\Release\bin\</OutputPath>
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
@@ -83,6 +83,7 @@
     <Compile Include="Sources\enums\ClassStyles.cs" />
     <Compile Include="Sources\enums\IdcStandardCursors.cs" />
     <Compile Include="Sources\enums\PeekMessagesConstants.cs" />
+    <Compile Include="Sources\enums\SetWindowPosFlags.cs" />
     <Compile Include="Sources\enums\ShowWindowCommands.cs" />
     <Compile Include="Sources\enums\VirtualCode.cs" />
     <Compile Include="Sources\enums\WmConstants.cs" />
