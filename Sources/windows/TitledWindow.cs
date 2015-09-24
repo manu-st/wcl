@@ -15,7 +15,7 @@ namespace WCL.Windows
 		public TitledWindow (string a_title)
 		{
 			RegisterClass ();
-			_handle = Win32.CreateWindowEx (DefaultExStyle (), ClassName (), a_title, DefaultStyle (), Win32.Cw_usedefault,
+			_handle = Win32.CreateWindowEx (DefaultExStyle, ClassName, a_title, DefaultStyle, Win32.Cw_usedefault,
 				Win32.Cw_usedefault, Win32.Cw_usedefault, Win32.Cw_usedefault, IntPtr.Zero,
 				IntPtr.Zero, Win32.GetModuleHandle (null), IntPtr.Zero);
 			if (_handle == IntPtr.Zero) {
@@ -30,10 +30,10 @@ namespace WCL.Windows
 
 		private void RegisterClass ()
 		{
-			WndClass l_class = new WndClass (ClassName ());
+			WndClass l_class = new WndClass (ClassName);
 			if (!l_class.IsRegistered ()) {
-				l_class.Style = ClassStyle ();
-				l_class.WindowProcedure = ClassWindowProcedure ();
+				l_class.Style = ClassStyle;
+				l_class.WindowProcedure = ClassWindowProcedure;
 						// For the time being, users cannot change the icon, cursor and brush for the class.
 				l_class.Cursor = Win32.LoadCursor (IntPtr.Zero, (int) IdcStandardCursors.Idc_arrow);
 				l_class.Icon = Win32.LoadIcon (IntPtr.Zero, new IntPtr ((int) SystemIcons.Idi_application));
@@ -47,31 +47,35 @@ namespace WCL.Windows
 #endregion
 
 #region Window class properties
-		public override string ClassName ()
+		public override string ClassName
 		{
-			return "WCL_TITLED_WINDOW";
+			get { return "WCL_TITLED_WINDOW"; }
 		}
 
-		public override ClassStyles ClassStyle ()
+		public override ClassStyles ClassStyle
 		{
-			return ClassStyles.DoubleClicks;
+			get { return ClassStyles.DoubleClicks; }
 		}
 
-		public override WndProc ClassWindowProcedure ()
+		public override WndProc ClassWindowProcedure
 		{
-			return new WndProc(WindowProcedure);
+			get { return new WndProc (WindowProcedure); }
 		}
 #endregion
 
 #region Window default creation properties
-		public override WindowStyles DefaultStyle ()
+		public override WindowStyles DefaultStyle
 		{
-			return WindowStyles.Ws_titledwindow | WindowStyles.Ws_dlgframe | WindowStyles.Ws_clipsiblings | WindowStyles.Ws_border;
+			get
+			{
+				return WindowStyles.Ws_titledwindow | WindowStyles.Ws_dlgframe | WindowStyles.Ws_clipsiblings |
+						WindowStyles.Ws_border;
+			}
 		}
 
-		public override WindowStylesEx DefaultExStyle ()
+		public override WindowStylesEx DefaultExStyle
 		{
-			return WindowStylesEx.Ws_ex_controlparent;
+			get { return WindowStylesEx.Ws_ex_controlparent; }
 		}
 #endregion
 	}

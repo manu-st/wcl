@@ -27,70 +27,77 @@ namespace WCL.Windows
 			get { return _handle;}
 		}
 
-		public int X ()
+		public int X
 			// x coordinate of current window relative to its parent if any. Otherwise `absolute_x'.
 		{
-			Window l_parent = _parent;
-
-			if (l_parent != null)
+			get
 			{
-				Point point = ClientRect ().Location;
-				Win32.ScreenToClient (l_parent.Handle, ref point);
-				return point.X;
-			} else {
-				return ScreenX ();
+				Window l_parent = _parent;
+
+				if (l_parent != null) {
+					Point point = ClientRect.Location;
+					Win32.ScreenToClient (l_parent.Handle, ref point);
+					return point.X;
+				} else {
+					return ScreenX;
+				}
 			}
 		}
 
-		public int Y ()
+		public int Y
 			// y coordinate of current window relative to its parent if any. Otherwise `absolute_y'.
 		{
-			Window l_parent = _parent;
-
-			if (l_parent != null)
+			get
 			{
-				Point point = ClientRect ().Location;
-				Win32.ScreenToClient (l_parent.Handle, ref point);
-				return point.Y;
-			} else {
-				return ScreenY ();
+				Window l_parent = _parent;
+
+				if (l_parent != null) {
+					Point point = ClientRect.Location;
+					Win32.ScreenToClient (l_parent.Handle, ref point);
+					return point.Y;
+				} else {
+					return ScreenY;
+				}
 			}
 		}
 
-		public int Width ()
+		public int Width
 			// Width of current window.
 		{
-			return ClientRect ().Width;
+			get { return ClientRect.Width; }
 		}
-		public int Height ()
+		public int Height
 			// Height of current window.
 		{
-			return ClientRect().Height;
+			get { return ClientRect.Height; }
 		}
 
-		public int ScreenX ()
+		public int ScreenX
 			// Absolute x coordinate of current window.
 		{
-			return ClientRect ().X;
+			get { return ClientRect.X; }
 		}
 
-		public int ScreenY ()
+		public int ScreenY
 			// Absolute y coordinate of current window.
 		{
-			return ClientRect ().Y;
+			get { return ClientRect.Y; }
 		}
 
-		public Rect ClientRect ()
+		public Rect ClientRect
 			// Dimension of current window as a Rect where `left' and `top' are zero.
 		{
-			Rect l_result;
-			Win32.GetClientRect (_handle, out l_result);
-			return l_result;
+			get
+			{
+				Rect l_result;
+				Win32.GetClientRect (_handle, out l_result);
+				return l_result;
+			}
 		}
 
-		public Size ClientSize ()
+		public Size ClientSize
 		{
-			return ClientRect ().Size;
+			get { return ClientRect.Size; }
 		}
 #endregion
 
@@ -123,13 +130,13 @@ namespace WCL.Windows
 		public void SetWidth(int v)
 			// Set `width' with `v'.
 		{
-			Win32.SetWindowPos (_handle, IntPtr.Zero, -1, -1, v, Height (), SetWindowPosFlags.Swp_nomove);
+			Win32.SetWindowPos (_handle, IntPtr.Zero, -1, -1, v, Height, SetWindowPosFlags.Swp_nomove);
 		}
 
 		public void SetHeight (int v)
 			// Set `height' with `v'.
 		{
-			Win32.SetWindowPos (_handle, IntPtr.Zero, -1, -1, Width (), v, SetWindowPosFlags.Swp_nomove);
+			Win32.SetWindowPos (_handle, IntPtr.Zero, -1, -1, Width, v, SetWindowPosFlags.Swp_nomove);
 		}
 #endregion
 
@@ -201,14 +208,14 @@ namespace WCL.Windows
 #endregion
 
 #region Window class properties
-		public abstract string ClassName ();
-		public abstract ClassStyles ClassStyle ();
-		public abstract WndProc ClassWindowProcedure ();
+		public abstract string ClassName { get; }
+		public abstract ClassStyles ClassStyle { get; }
+		public abstract WndProc ClassWindowProcedure { get; }
 #endregion
 
 #region Window default creation properties
-		public abstract WindowStyles DefaultStyle ();
-		public abstract WindowStylesEx DefaultExStyle ();
+		public abstract WindowStyles DefaultStyle { get; }
+		public abstract WindowStylesEx DefaultExStyle { get; }
 #endregion
 
 #region Implementation: Access
