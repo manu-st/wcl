@@ -16,14 +16,14 @@ namespace WCL.Structs
 #region Initialization
 		public Point (int a_x, int a_y)
 		{
-			x = a_x;
-			y = a_y;
+			X = a_x;
+			Y = a_y;
 		}
 #endregion
 
 #region Access
-		public int x;
-		public int y;
+		public int X;
+		public int Y;
 #endregion
 
 	}

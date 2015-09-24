@@ -1,8 +1,6 @@
 ﻿// Copyright (c) 2015 manu-silicon
 // This file is distributed under the MIT License. See LICENSE.md for details.
 
-using System;
-
 namespace WCL.enums
 {
 		/// <summary>

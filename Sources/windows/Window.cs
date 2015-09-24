@@ -3,6 +3,7 @@
 
 using System;
 using System.Diagnostics.Contracts;
+using System.Runtime.Serialization;
 using WCL;
 using WCL.Callbacks;
 using WCL.Enums;
@@ -14,105 +15,121 @@ namespace WCL.Windows
 	public abstract class Window
 	{
 #region Access
-		public Window parent
+		public Window Parent
 			// Parent of current window if any.
 		{
 			get { return _parent; }
 		}
 
-		public IntPtr item
+		public IntPtr Handle
 			// Underlying HWND handle of current window.
 		{
-			get { return _item;}
+			get { return _handle;}
 		}
 
-		public int x ()
+		public int X ()
 			// x coordinate of current window relative to its parent if any. Otherwise `absolute_x'.
 		{
 			Window l_parent = _parent;
 
 			if (l_parent != null)
 			{
-				Point point = client_rect ().location;
-				Win32.ScreenToClient (l_parent.item, ref point);
-				return point.x;
+				Point point = ClientRect ().Location;
+				Win32.ScreenToClient (l_parent.Handle, ref point);
+				return point.X;
 			} else {
-				return absolute_x ();
+				return ScreenX ();
 			}
 		}
 
-		public int y ()
+		public int Y ()
 			// y coordinate of current window relative to its parent if any. Otherwise `absolute_y'.
 		{
 			Window l_parent = _parent;
 
 			if (l_parent != null)
 			{
-				Point point = client_rect ().location;
-				Win32.ScreenToClient (l_parent.item, ref point);
-				return point.y;
+				Point point = ClientRect ().Location;
+				Win32.ScreenToClient (l_parent.Handle, ref point);
+				return point.Y;
 			} else {
-				return absolute_y ();
+				return ScreenY ();
 			}
 		}
 
-		public int width ()
+		public int Width ()
 			// Width of current window.
 		{
-			return client_rect ().width;
+			return ClientRect ().Width;
 		}
-		public int height ()
+		public int Height ()
 			// Height of current window.
 		{
-			return client_rect().height;
+			return ClientRect().Height;
 		}
 
-		public int absolute_x ()
+		public int ScreenX ()
 			// Absolute x coordinate of current window.
 		{
-			return client_rect ().x;
+			return ClientRect ().X;
 		}
 
-		public int absolute_y ()
+		public int ScreenY ()
 			// Absolute y coordinate of current window.
 		{
-			return client_rect ().y;
+			return ClientRect ().Y;
 		}
 
-		public Rect client_rect ()
+		public Rect ClientRect ()
 			// Dimension of current window as a Rect where `left' and `top' are zero.
 		{
 			Rect l_result;
-			Win32.GetClientRect (_item, out l_result);
+			Win32.GetClientRect (_handle, out l_result);
 			return l_result;
+		}
+
+		public Size ClientSize ()
+		{
+			return ClientRect ().Size;
 		}
 #endregion
 
 #region Status Report
-		public bool exists ()
+		public bool Exists ()
 		{
-			return _item != IntPtr.Zero;
+			return _handle != IntPtr.Zero;
 		}
 #endregion
 
 #region Element change
-		public void show ()
+		public void Show ()
 			// Show window.
 		{
-			Win32.ShowWindow (_item, ShowWindowCommands.Show);
-			Win32.UpdateWindow (_item);
+			Win32.ShowWindow (_handle, ShowWindowCommands.Show);
+			Win32.UpdateWindow (_handle);
 		}
 
-		public void set_width(int v)
+		public void Destroy ()
+			// Destroy window
+		{
+			Contract.Requires (Exists (), "Window exists.");
+
+			Win32.DestroyWindow (_handle);
+			_handle = IntPtr.Zero;
+
+			Contract.Ensures (!Exists (), "Window destroyed.");
+		}
+
+		public void SetWidth(int v)
 			// Set `width' with `v'.
 		{
-			Win32.SetWindowPos (_item, IntPtr.Zero, -1, -1, v, height (), SetWindowPosFlags.Swp_nomove);
+			Win32.SetWindowPos (_handle, IntPtr.Zero, -1, -1, v, Height (), SetWindowPosFlags.Swp_nomove);
 		}
 
-		public void set_height (int v)
+		public void SetHeight (int v)
 			// Set `height' with `v'.
 		{
-			Win32.SetWindowPos (_item, IntPtr.Zero, -1, -1, width (), v, SetWindowPosFlags.Swp_nomove);
+			Win32.SetWindowPos (_handle, IntPtr.Zero, -1, -1, Width (), v, SetWindowPosFlags.Swp_nomove);
 		}
 #endregion
 
@@ -121,16 +138,18 @@ namespace WCL.Windows
 		public delegate void ExposeDelegate (Window win, Dc a_dc, Rect a_rect);
 		public delegate void KeyDelegate (Window win, int a_vk, int a_key_flags);
 		public delegate void CharDelegate (Window win, char a_char, int a_key_flags);
+		public delegate void NotificationDelegate (Window win);
 
-		public event PointerButtonPressDelegate pointer_button_press_actions;
-		public event ExposeDelegate expose_actions;
-		public event KeyDelegate key_down_actions;
-		public event KeyDelegate key_up_actions;
-		public event CharDelegate char_actions;
+		public event PointerButtonPressDelegate PointerButtonPressActions;
+		public event ExposeDelegate ExposeActions;
+		public event KeyDelegate KeyDownActions;
+		public event KeyDelegate KeyUpActions;
+		public event CharDelegate CharActions;
+		public event NotificationDelegate CloseActions;
 #endregion
 
 #region Messaging
-		public IntPtr window_procedure (IntPtr hwnd, WmConstants msg, IntPtr wparam, IntPtr lparam)
+		public IntPtr WindowProcedure (IntPtr hwnd, WmConstants msg, IntPtr wparam, IntPtr lparam)
 			// Routine called by Windows whenever a new message is received for the current window.
 		{
 			switch (msg) {
@@ -139,30 +158,30 @@ namespace WCL.Windows
 
 				case WmConstants.Wm_paint:
 					PaintDc l_dc = new PaintDc (this);
-					l_dc.get ();
-					expose_actions?.Invoke (this, l_dc, l_dc.paint_rect ());
-					l_dc.release ();
+					l_dc.Get ();
+					ExposeActions?.Invoke (this, l_dc, l_dc.PaintRect ());
+					l_dc.Release ();
 					return IntPtr.Zero;
 
 				case WmConstants.Wm_lbuttondown:
-					pointer_button_press_actions?.Invoke (this, (short) lparam.ToInt64 (), (short) (lparam.ToInt64 () >> 16), 1);
+					PointerButtonPressActions?.Invoke (this, (short) lparam.ToInt64 (), (short) (lparam.ToInt64 () >> 16), 1);
 					return IntPtr.Zero;
 
 				case WmConstants.Wm_keydown:
-					key_down_actions?.Invoke (this, (int) wparam.ToInt64(), (int) lparam.ToInt64());
+					KeyDownActions?.Invoke (this, (int) wparam.ToInt64(), (int) lparam.ToInt64());
 					return IntPtr.Zero;
 
 				case WmConstants.Wm_keyup:
-					key_up_actions?.Invoke (this, (int) wparam.ToInt64(), (int) lparam.ToInt64());
+					KeyUpActions?.Invoke (this, (int) wparam.ToInt64(), (int) lparam.ToInt64());
 					return IntPtr.Zero;
 
 				case WmConstants.Wm_char:
-					char_actions?.Invoke (this, (char) wparam.ToInt64(), (int) lparam.ToInt64());
+					CharActions?.Invoke (this, (char) wparam.ToInt64(), (int) lparam.ToInt64());
 					return IntPtr.Zero;
 
 				case WmConstants.Wm_close:
 						// Temporary handling to close the application as soon as we close a window.
-					Win32.PostMessage (hwnd, WmConstants.Wm_quit, IntPtr.Zero, IntPtr.Zero);
+					CloseActions?.Invoke (this);
 					return IntPtr.Zero;
 
 				default:
@@ -173,28 +192,28 @@ namespace WCL.Windows
 
 #region Drawing facilities
 
-		public void invalidate ()
+		public void Invalidate ()
 			// Invalidate client area of current window. Background will be cleared first.
 		{
-			Win32.InvalidateRect (item, IntPtr.Zero, true);
+			Win32.InvalidateRect (Handle, IntPtr.Zero, true);
 		}
 
 #endregion
 
 #region Window class properties
-		public abstract string class_name ();
-		public abstract ClassStyles class_style ();
-		public abstract WndProc class_window_procedure ();
+		public abstract string ClassName ();
+		public abstract ClassStyles ClassStyle ();
+		public abstract WndProc ClassWindowProcedure ();
 #endregion
 
 #region Window default creation properties
-		public abstract WindowStyles default_style ();
-		public abstract WindowStylesEx default_ex_style ();
+		public abstract WindowStyles DefaultStyle ();
+		public abstract WindowStylesEx DefaultExStyle ();
 #endregion
 
 #region Implementation: Access
 		protected Window _parent;
-		protected IntPtr _item;
+		protected IntPtr _handle;
 #endregion
 	}
 }

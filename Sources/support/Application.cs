@@ -16,24 +16,30 @@ namespace WCL.Support
 #endregion
 
 #region Basic Operations
-		public void launch ()
+		public void Launch ()
 		{
 			Msg msg = new Msg ();
 			bool done = false;
 
 			while (!done) {
-				if (msg.peek_all ()) {
+				if (msg.PeekAll ()) {
 					if (msg.message == WmConstants.Wm_quit) {
 						done = true;
 					} else {
-						msg.translate ();
-						msg.dispatch ();
+						msg.Translate ();
+						msg.Dispatch ();
 					}
 				} else {
 						// Idle Actions
-					msg.wait ();
+					msg.Wait ();
 				}
 			}
+		}
+
+		public void Destroy ()
+			// Signal that we want to exit from the even loop.
+		{
+			Win32.PostMessage (IntPtr.Zero, WmConstants.Wm_quit, IntPtr.Zero, IntPtr.Zero);
 		}
 #endregion
 

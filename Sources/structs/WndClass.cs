@@ -6,7 +6,6 @@ using System.Diagnostics.Contracts;
 using System.Runtime.InteropServices;
 using WCL.Callbacks;
 using WCL.Enums;
-using WCL.Sources.structs;
 
 namespace WCL.Structs
 {
@@ -22,27 +21,27 @@ namespace WCL.Structs
 		{
 			Contract.Requires (a_class_name != null, "a_class_name not null");
 
-			class_name = a_class_name;
+			ClassName = a_class_name;
 			unsafe {
-				item->hInstance = Win32.GetModuleHandle (null);
+				Handle->hInstance = Win32.GetModuleHandle (null);
 			}
 
-			Contract.Ensures (class_name.Equals (a_class_name), "class_name_set");
-			Contract.Ensures (_item != IntPtr.Zero, "item_set");
+			Contract.Ensures (ClassName.Equals (a_class_name), "class_name_set");
+			Contract.Ensures (_handle != IntPtr.Zero, "item_set");
 		}
 #endregion
 
 #region Access
-		public unsafe _WndClass* item
+		public unsafe _WndClass* Handle
 		{
-			get { return (_WndClass*) _item; }
+			get { return (_WndClass*) _handle; }
 		}
 
-		public unsafe string class_name
+		public unsafe string ClassName
 		{
 			get {
-				if (item->lpszClassName != IntPtr.Zero) {
-					return Marshal.PtrToStringUni (item->lpszClassName);
+				if (Handle->lpszClassName != IntPtr.Zero) {
+					return Marshal.PtrToStringUni (Handle->lpszClassName);
 				} else {
 					return null;
 				}
@@ -50,89 +49,93 @@ namespace WCL.Structs
 			set {
 				if (value != null) {
 					_class_name = new WclString (value);
-					item->lpszClassName = _class_name.item;
+					Handle->lpszClassName = _class_name.Handle;
 				} else {
 					_class_name = null;
-					item->lpszClassName = IntPtr.Zero;
+					Handle->lpszClassName = IntPtr.Zero;
 				}
 			}
 		}
 
-		public unsafe string menu_name
+		public unsafe string MenuName
 		{
 			get {
-				if (item->lpszMenuName != IntPtr.Zero) {
-					return Marshal.PtrToStringUni (item->lpszMenuName);
+				if (Handle->lpszMenuName != IntPtr.Zero) {
+					return Marshal.PtrToStringUni (Handle->lpszMenuName);
 				} else {
 					return null;
 				}
 			}
 			set {
 				_menu_name = new WclString (value);
-				item->lpszMenuName = _menu_name.item;
+				Handle->lpszMenuName = _menu_name.Handle;
 			}
 		}
 
-		public unsafe WndProc window_procedure
+		public unsafe WndProc WindowProcedure
 		{
 			get { return _window_procedure; }
 			set {
 				_window_procedure = value;
-				item->lpfnWndProc = Marshal.GetFunctionPointerForDelegate <WndProc> (value);
+				Handle->lpfnWndProc = Marshal.GetFunctionPointerForDelegate <WndProc> (value);
 			}
 		}
 
-		public unsafe IntPtr cursor
+		public unsafe IntPtr Cursor
 		{
-			get { return item->hCursor; }
-			set { item->hCursor = value; }
+			get { return Handle->hCursor; }
+			set { Handle->hCursor = value; }
 		}
 
-		public unsafe IntPtr icon
+		public unsafe IntPtr Icon
 		{
-			get { return item->hIcon; }
-			set { item->hIcon = value; }
+			get { return Handle->hIcon; }
+			set { Handle->hIcon = value; }
 		}
-		public unsafe IntPtr background_brush
+		public unsafe IntPtr BackgroundBrush
 		{
-			get { return item->hbrBackground; }
-			set { item->hbrBackground = value; }
+			get { return Handle->hbrBackground; }
+			set { Handle->hbrBackground = value; }
 		}
 
-		public unsafe ClassStyles style
+		public unsafe ClassStyles Style
 		{
-			get { return (ClassStyles) item->style; }
-			set { item->style = (uint) value; }
+			get { return (ClassStyles) Handle->style; }
+			set { Handle->style = (uint) value; }
 		}
 #endregion
 
 #region Basic operations
-		public void register ()
+		public void Register ()
 		{
 				// This returns the atom of the new registered class. For now we do not store it.
-			Win32.RegisterClass (_item);
+			Win32.RegisterClass (_handle);
 		}
 
-		public unsafe void unregister ()
+		public unsafe void UnRegister ()
 		{
-			Contract.Requires (is_registered (), "registered");
+			Contract.Requires (IsRegistered (), "registered");
 
-			Win32.UnregisterClass (item->lpszClassName, item->hInstance);
+			Win32.UnregisterClass (Handle->lpszClassName, Handle->hInstance);
 
-			Contract.Ensures (!is_registered (), "not registered");
+			Contract.Ensures (!IsRegistered (), "not registered");
 		}
 #endregion
 
-		public unsafe bool is_registered ()
+#region Status Report
+		public unsafe bool IsRegistered ()
 		{
 			_WndClass l_class;
-			return Win32.GetClassInfo (IntPtr.Zero, item->lpszClassName, &l_class) ||
-				Win32.GetClassInfo (item->hInstance, item->lpszClassName, &l_class);
+			return Win32.GetClassInfo (IntPtr.Zero, Handle->lpszClassName, &l_class) ||
+				Win32.GetClassInfo (Handle->hInstance, Handle->lpszClassName, &l_class);
 		}
+#endregion
 
+#region Implementation: Access
 		private WclString _class_name;
 		private WclString _menu_name;
 		private WndProc _window_procedure;
+#endregion
 	}
 
 		/// <summary>

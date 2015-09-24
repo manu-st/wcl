@@ -5,7 +5,7 @@ using System;
 using System.Diagnostics.Contracts;
 using System.Runtime.InteropServices;
 
-namespace WCL.Sources.structs
+namespace WCL.Structs
 {
 		/// <summary>
 		/// Abstract class that provides facilities to allocate/deallocate C structures in a generic manner.
@@ -22,16 +22,16 @@ namespace WCL.Sources.structs
 			} else {
 				Win32.FillMemory (l_item, (uint) Marshal.SizeOf <T> (), 0);
 			}
-			_item = l_item;
+			_handle = l_item;
 			_shared = false;
 
-			Contract.Ensures (_item != IntPtr.Zero, "item_set");
+			Contract.Ensures (_handle != IntPtr.Zero, "item_set");
 			Contract.Ensures (!_shared, "not shared");
 		}
 #endregion
 
 #region Status Report
-		public bool is_shared
+		public bool IsShared
 		{
 			get { return _shared; }
 			set { _shared = value; }
@@ -39,16 +39,16 @@ namespace WCL.Sources.structs
 #endregion
 
 #region Implementation: Access
-		protected IntPtr _item;
+		protected IntPtr _handle;
 		protected bool _shared;
 		#endregion
 
 #region Disposal
 		protected virtual void Dispose (bool disposing)
 		{
-			if ((_item != null) && !_shared) {
-				Marshal.FreeHGlobal (_item);
-				_item = IntPtr.Zero;
+			if ((_handle != null) && !_shared) {
+				Marshal.FreeHGlobal (_handle);
+				_handle = IntPtr.Zero;
 			}
 		}
 

@@ -1,8 +1,6 @@
 ﻿// Copyright (c) 2015 manu-silicon
 // This file is distributed under the MIT License. See LICENSE.md for details.
 
-using System;
-
 namespace WCL.Enums
 {
 		/// <summary>
@@ -11,8 +9,8 @@ namespace WCL.Enums
 		/// </summary>
 	public enum PeekMessageConstants
 	{
-		pm_noremove = 0,
-		pm_remove = 1,
+		Pm_noremove = 0,
+		Pm_remove = 1,
 		Pm_noyield = 2,
 		Pm_qs_input = 0x4070000,
 		Pm_qs_paint = 0x200000,

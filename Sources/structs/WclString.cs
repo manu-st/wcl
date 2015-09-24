@@ -18,11 +18,11 @@ namespace WCL.Structs
 		{
 			Contract.Requires (s != null, "s not null");
 
-			set_string (s);
+			SetString (s);
 
-			Contract.Ensures (_item != IntPtr.Zero, "item_set");
-			Contract.Ensures (capacity == s.Length, "capacity_set");
-			Contract.Ensures (get_string().Equals(s), "string_set");
+			Contract.Ensures (_handle != IntPtr.Zero, "handle set");
+			Contract.Ensures (Capacity == s.Length, "capacity_set");
+			Contract.Ensures (String().Equals(s), "string_set");
 		}
 
 		public WclString(int n)
@@ -35,28 +35,28 @@ namespace WCL.Structs
 			} else {
 				Win32.FillMemory (l_item, (uint) ((n + 1) * unit_size), 0);
 			}
-			_item = l_item;
+			_handle = l_item;
 			_capacity = n;
 
-			Contract.Ensures (_item != IntPtr.Zero, "item_set");
-			Contract.Ensures (capacity == n, "capacity_set");
+			Contract.Ensures (_handle != IntPtr.Zero, "handle set");
+			Contract.Ensures (Capacity == n, "capacity_set");
 		}
 		#endregion
 
 #region Access
-		public IntPtr item { get { return _item; } }
+		public IntPtr Handle { get { return _handle; } }
 
 		public const int unit_size = 2;
 
-		public string get_string ()
+		public string String ()
 		{
-			return Marshal.PtrToStringUni (_item);
+			return Marshal.PtrToStringUni (_handle);
 		}
 #endregion
 
 #region Measurements
-		public int capacity
-			// Capacity that `item' can hold expressed in number of characters (i.e. a multiple of `unit_size'.
+		public int Capacity
+			// Capacity that current can hold expressed in number of characters (i.e. a multiple of `unit_size'.
 		{
 			get {
 
@@ -66,26 +66,26 @@ namespace WCL.Structs
 			}
 		}
 
-		public int count
+		public int Count
 		{
 			get {
-				int nb = capacity;
+				int nb = Capacity;
 				int i = 0;
 				int l_char_size = unit_size;
 
 				for (; i < nb; i++) {
-					if (Marshal.ReadInt16 (_item, i * l_char_size) == 0) {
+					if (Marshal.ReadInt16 (_handle, i * l_char_size) == 0) {
 						return i;
 					}
 				}
 					// End of buffer was reached.
-				return capacity;
+				return Capacity;
 			}
 		}
 #endregion
 
 #region Element change
-		public void set_string (string a_string)
+		public void SetString (string a_string)
 		{
 			Contract.Requires (a_string != null, "a_string not null");
 
@@ -95,23 +95,23 @@ namespace WCL.Structs
 
 			for (; i < nb; i++) {
 				char c = a_string [i];
-				Marshal.WriteInt16(_item, i * l_char_size, c);
+				Marshal.WriteInt16(_handle, i * l_char_size, c);
 			}
-			Marshal.WriteInt16 (_item, nb * l_char_size, 0);
+			Marshal.WriteInt16 (_handle, nb * l_char_size, 0);
 
-			Contract.Ensures (get_string ().Equals (a_string), "string_set");
+			Contract.Ensures (String ().Equals (a_string), "string_set");
 		}
 #endregion
 
 #region Implementation: Accesss
 		protected int _capacity;
-		protected IntPtr _item;
+		protected IntPtr _handle;
 #endregion
 
 		[ContractInvariantMethod]
 		private void ClassInvariant ()
 		{
-//			Contract.Invariant (_item != IntPtr.Zero, "internal pointer not null");
+//			Contract.Invariant (_handle != IntPtr.Zero, "internal pointer not null");
 //			Contract.Invariant (_capacity >= 0, "capacity non-negative");
 		}
 	}

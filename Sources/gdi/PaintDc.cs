@@ -11,43 +11,43 @@ namespace WCL.Gdi
 		public PaintDc (Window a_window)
 		{
 			Contract.Requires (a_window != null, "Window not null");
-			Contract.Requires (a_window.exists (), "Window exists");
+			Contract.Requires (a_window.Exists (), "Window exists");
 
-			window = a_window;
-			_item = IntPtr.Zero;
+			_window = a_window;
+			_handle = IntPtr.Zero;
 
-			Contract.Ensures (window == a_window, "window set");
-			Contract.Ensures (_item == IntPtr.Zero, "item set");
+			Contract.Ensures (_window == a_window, "window set");
+			Contract.Ensures (_handle == IntPtr.Zero, "handle set");
 		}
 #endregion
 
 #region Access
-		public PaintStruct paint_struct
+		public PaintStruct PaintStruct
 		{
 			get { return _paint_struct; }
 		}
 
-		public Rect paint_rect ()
+		public Rect PaintRect ()
 		{
 			return _paint_struct.rcPaint;
 		}
 #endregion
 
 #region Basic operations
-		public override void get ()
+		public override void Get ()
 		{
-			_item = Win32.BeginPaint(window.item, out _paint_struct);
+			_handle = Win32.BeginPaint(_window.Handle, out _paint_struct);
 		}
 
-		public override void release ()
+		public override void Release ()
 		{
-			Win32.EndPaint(window.item, ref _paint_struct);
+			Win32.EndPaint(_window.Handle, ref _paint_struct);
 		}
 #endregion
 
 #region Implementation: Access
 		protected PaintStruct _paint_struct;
-		protected Window window;
+		protected Window _window;
 #endregion
 
 	}

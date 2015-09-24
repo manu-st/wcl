@@ -17,66 +17,66 @@ namespace WCL.Structs
 #region Initialization
 		public Rect (int a_left, int a_top, int a_right, int a_bottom)
 		{
-			left = a_left;
-			top = a_top;
-			right = a_right;
-			bottom = a_bottom;
+			Left = a_left;
+			Top = a_top;
+			Right = a_right;
+			Bottom = a_bottom;
 		}
 #endregion
 
 #region Access
-		public int left, top, right, bottom;
+		public int Left, Top, Right, Bottom;
 
-		public int x
+		public int X
 		{
-			get { return left; }
-			set { right -= (left - value); left = value; }
+			get { return Left; }
+			set { Right -= (Left - value); Left = value; }
 		}
 
-		public int y
+		public int Y
 		{
-			get { return top; }
-			set { bottom -= (top - value); top = value; }
+			get { return Top; }
+			set { Bottom -= (Top - value); Top = value; }
 		}
 
-		public int height
+		public int Height
 		{
-			get { return bottom - top; }
-			set { bottom = value + top; }
+			get { return Bottom - Top; }
+			set { Bottom = value + Top; }
 		}
 
-		public int width
+		public int Width
 		{
-			get { return right - left; }
-			set { right = value + left; }
+			get { return Right - Left; }
+			set { Right = value + Left; }
 		}
 
-		public Point location
+		public Point Location
 		{
 			get {
-				Point l_point = new Point (left, top);
+				Point l_point = new Point (Left, Top);
 
-				Contract.Ensures (Contract.Result<Point> ().x == left, "x set with left");
-				Contract.Ensures (Contract.Result<Point> ().y == top, "y set with top");
+				Contract.Ensures (Contract.Result<Point> ().X == Left, "x set with left");
+				Contract.Ensures (Contract.Result<Point> ().Y == Top, "y set with top");
 
 				return l_point;
 			}
-			set { x = value.x; y = value.y; }
+			set { X = value.X; Y = value.Y; }
 		}
 
-//		public Size Size
-//		{
-//			get { return new Size (width, height); }
-//			set { Width = value.width; height = value.height; }
-//		}
+		public Size Size
+		{
+			get { return new Size (Width, Height); }
+			set { Width = value.Width; Height = value.Height; }
+		}
 
 		public override int GetHashCode ()
 		{
 				// Taken from http://referencesource.microsoft.com/#System.Drawing/commonui/System/Drawing/Rectangle.cs,17559e21008f381d
-			return (int)((UInt32) x ^
-						(((UInt32) y << 13) | ((UInt32) y >> 19)) ^
-						(((UInt32) width << 26) | ((UInt32) width >> 6)) ^
-						(((UInt32) height << 7) | ((UInt32) height >> 25)));
+			return (int)((UInt32) X ^
+						(((UInt32) Y << 13) | ((UInt32) Y >> 19)) ^
+						(((UInt32) Width << 26) | ((UInt32) Width >> 6)) ^
+						(((UInt32) Height << 7) | ((UInt32) Height >> 25)));
 		}
 #endregion
 
@@ -93,7 +93,7 @@ namespace WCL.Structs
 
 		public bool Equals (Rect r)
 		{
-			return r.left == left && r.top == top && r.right == right && r.bottom == bottom;
+			return r.Left == Left && r.Top == Top && r.Right == Right && r.Bottom == Bottom;
 		}
 
 		public override bool Equals(object obj)
@@ -109,7 +109,7 @@ namespace WCL.Structs
 #region Output
 		public override string ToString ()
 		{
-			return string.Format (System.Globalization.CultureInfo.CurrentCulture, "{{left={0},top={1},right={2},bottom={3}}}", left, top, right, bottom);
+			return string.Format (System.Globalization.CultureInfo.CurrentCulture, "{{left={0},top={1},right={2},bottom={3}}}", Left, Top, Right, Bottom);
 		}
 	}
 #endregion

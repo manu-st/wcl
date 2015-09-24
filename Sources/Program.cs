@@ -18,56 +18,62 @@ class Program
 	{
 		Application app = new Application ();
 		TitledWindow win = new TitledWindow ("A nice Title!");
-		last_char = (char)  0;
-		is_key_down = false;
-		win.pointer_button_press_actions += on_left_click;
-		win.expose_actions += on_paint;
-		win.char_actions += on_char;
-		win.key_down_actions += on_key_down;
-		win.key_up_actions += on_key_up;
-		win.show ();
-		win.set_width (200);
-		win.set_height (200);
-		app.launch ();
+		_last_char = (char)  0;
+		_is_key_down = false;
+		win.PointerButtonPressActions += OnLeftClick;
+		win.ExposeActions += OnPaint;
+		win.CharActions += OnChar;
+		win.KeyDownActions += OnKeyDown;
+		win.KeyUpActions += OnKeyUp;
+		win.CloseActions += OnClose;
+		win.Show ();
+		win.SetWidth (200);
+		win.SetHeight (200);
+		app.Launch ();
 	}
 
-	public void on_left_click (Window win, int x, int y, int button)
+	public void OnLeftClick (Window win, int x, int y, int button)
 	{
-		win.invalidate ();
+		win.Invalidate ();
 	}
 
-	public void on_paint (Window win, Dc a_dc, Rect a_area)
+	public void OnPaint (Window win, Dc a_dc, Rect a_area)
 	{
-		a_dc.draw_rectangle (39, 39, 300, 60);
-		if (is_key_down) {
-			a_dc.draw_text ("Key is down", 40, 40);
+		a_dc.DrawRectangle (39, 39, 300, 60);
+		if (_is_key_down) {
+			a_dc.DrawText ("Key is down", 40, 40);
 		} else {
-			if (last_char == (char) 0) {
-				a_dc.draw_text ("Type a key", 40, 40);
+			if (_last_char == (char) 0) {
+				a_dc.DrawText ("Type a key", 40, 40);
 			} else {
-				a_dc.draw_text ("Last key was '" + last_char.ToString () + "'", 40, 40);
+				a_dc.DrawText ("Last key was '" + _last_char.ToString () + "'", 40, 40);
 			}
 		}
 	}
 
-	public void on_char (Window win, char a_char, int a_key_flags)
+	public void OnChar (Window win, char a_char, int a_key_flags)
 	{
-		last_char = a_char;
-		win.invalidate ();
+		_last_char = a_char;
+		win.Invalidate ();
 	}
 
-	public void on_key_down (Window win, int a_vk, int a_key_flags)
+	public void OnKeyDown (Window win, int a_vk, int a_key_flags)
 	{
-		is_key_down = true;
-		win.invalidate ();
+		_is_key_down = true;
+		win.Invalidate ();
 	}
 
-	public void on_key_up (Window win, int a_vk, int a_key_flags)
+	public void OnKeyUp (Window win, int a_vk, int a_key_flags)
 	{
-		is_key_down = false;
-		win.invalidate ();
+		_is_key_down = false;
+		win.Invalidate ();
 	}
 
-	private char last_char;
-	private bool is_key_down;
+	public void OnClose (Window win)
+	{
+		win.Destroy ();
+	}
+
+	private char _last_char;
+	private bool _is_key_down;
 }

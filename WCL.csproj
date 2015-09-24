@@ -97,6 +97,7 @@
     <Compile Include="Sources\structs\Point.cs" />
     <Compile Include="Sources\Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Sources\structs\Size.cs" />
     <Compile Include="Sources\structs\Structure.cs" />
     <Compile Include="Sources\structs\WclString.cs" />
     <Compile Include="Sources\structs\WndClass.cs" />

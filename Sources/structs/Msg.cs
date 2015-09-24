@@ -25,25 +25,25 @@ namespace WCL.Structs
 #endregion
 
 #region Basic Operations
-		public bool peek_all ()
+		public bool PeekAll ()
 			// Peek all messages in the queue.
 		{
-			return Win32.PeekMessage (out this, (IntPtr) 0, 0, 0, PeekMessageConstants.pm_remove);
+			return Win32.PeekMessage (out this, (IntPtr) 0, 0, 0, PeekMessageConstants.Pm_remove);
 		}
 
-		public void wait ()
+		public void Wait ()
 			// Wait for a new message.
 		{
 			Win32.WaitMessage ();
 		}
 
-		public void translate ()
+		public void Translate ()
 			// Translate virtual-key messages into character messages.
 		{
 			Win32.TranslateMessage (ref this);
 		}
 
-		public void dispatch ()
+		public void Dispatch ()
 			// Dispatch the message to a window procedure.
 		{
 			Win32.DispatchMessage (ref this);

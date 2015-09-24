@@ -1,8 +1,5 @@
 ﻿using System;
-using System.Runtime.Serialization;
-using System.Diagnostics.Contracts;
 using WCL.Structs;
-using WCL.Windows;
 
 namespace WCL.Gdi
 {
@@ -10,29 +7,29 @@ namespace WCL.Gdi
 	{
 
 #region Basic operations
-		public abstract void get ();
+		public abstract void Get ();
 			// Get the device context.
 
-		public abstract void release ();
+		public abstract void Release ();
 		// Release the device context.
 		#endregion
 
 
 #region Drawing operations
 
-		public void draw_text(string s, int x, int y)
+		public void DrawText(string s, int x, int y)
 		{
-			Win32.TextOut(_item, x, y, s, s.Length);
+			Win32.TextOut(_handle, x, y, s, s.Length);
 		}
 
-		public void draw_rectangle (int left, int top, int right, int bottom)
+		public void DrawRectangle (int left, int top, int right, int bottom)
 		{
-			Win32.Rectangle (_item, left, top, right, bottom);
+			Win32.Rectangle (_handle, left, top, right, bottom);
 		}
 
-		public void draw_rectangle (Rect r)
+		public void DrawRectangle (Rect r)
 		{
-			draw_rectangle (r.left, r.top, r.right, r.bottom);
+			DrawRectangle (r.Left, r.Top, r.Right, r.Bottom);
 		}
 
 
@@ -40,7 +37,7 @@ namespace WCL.Gdi
 
 #region Implementation: Access
 
-		protected IntPtr _item;
+		protected IntPtr _handle;
 
 #endregion
 	}
