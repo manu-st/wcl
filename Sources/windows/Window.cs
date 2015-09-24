@@ -3,8 +3,6 @@
 
 using System;
 using System.Diagnostics.Contracts;
-using System.Runtime.Serialization;
-using WCL;
 using WCL.Callbacks;
 using WCL.Enums;
 using WCL.Gdi;
