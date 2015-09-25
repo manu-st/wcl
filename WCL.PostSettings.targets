@@ -2,5 +2,12 @@
   <!--
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   -->
-  <Import Project="CoreFX\configs\Microsoft.Portable.CSharp.targets" />
-</Project>  
+  <Import Project="CoreFX\configs\CoreCLR.CSharp.targets" />
+
+  <PropertyGroup>
+    <IntermediateOutputPath>CGens\$(Configuration)\obj\</IntermediateOutputPath>
+    <OutputPath>CGens\$(Configuration)\bin\</OutputPath>
+    <OutDir>CGens\$(Configuration)\bin\</OutDir>
+  </PropertyGroup>
+
+</Project>
