@@ -154,7 +154,7 @@ namespace WCL.Windows
 #endregion
 
 #region Messaging
-		public IntPtr WindowProcedure (IntPtr hwnd, WmConstants msg, IntPtr wparam, IntPtr lparam)
+		public virtual IntPtr WindowProcedure (IntPtr hwnd, WmConstants msg, IntPtr wparam, IntPtr lparam)
 			// Routine called by Windows whenever a new message is received for the current window.
 		{
 			switch (msg) {
